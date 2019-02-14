@@ -17,20 +17,27 @@ public class Wallet {
 		this.twenties = twenties;
 		this.hundreds = hundreds;
 	}
-	
+
 	/*
 	 * Creates a new wallet with exactly the same bills as the parameter wallet
 	 */
 	public Wallet(Wallet w) {
 		// YOUR CODE HERE
 	}
-	
+
 	/*
-	 * Return true if and only if the parameter wallet contans exactly the same bills 
+	 * Return true if and only if the parameter wallet contains exactly the same bills 
 	 * as the target object.
 	 */
 	public boolean equals(Object o) {
-		// YOUR CODE HERE
+		if (o instanceof Wallet) {
+			Wallet w = (Wallet) o;
+			return ((this.ones     == w.ones) &&
+					(this.fives    == w.fives) &&
+					(this.tens     == w.tens) &&
+					(this.twenties == w.twenties) &&
+					(this.hundreds == w.hundreds));
+		}
 		return false;
 	}
 
@@ -48,7 +55,7 @@ public class Wallet {
 	public int getTens()     { return tens; }
 	public int getTwenties() { return twenties; }
 	public int getHundreds() { return hundreds; }
-	
+
 	// Setters
 	public void setOnes(int ones)         { this.ones = ones; }
 	public void setFives(int fives)       { this.fives = fives; }
@@ -63,7 +70,7 @@ public class Wallet {
 		// YOUR CODE HERE
 		return 0; // Dummy return. Please change and remove comment
 	}
-	
+
 	/*
 	 * Modifies the target wallet to add the bills from the parameter wallet
 	 */
