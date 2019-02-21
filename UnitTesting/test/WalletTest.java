@@ -1,6 +1,13 @@
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class WalletTest {
 
@@ -76,5 +83,47 @@ class WalletTest {
 		}
 	}
 
+	/**
+	 * 
+	 * Test Copy Constructor
+	 * 
+	 */
+	
+	@Test
+	public void testCopyContructor() {
+		
+		Wallet w = new Wallet(1,2,3,4,5);
+		Wallet w2 = new Wallet(w);
+		assertAll("Copy Contructor",
+				() -> assertEquals(w.getOnes(),w2.getOnes()),
+				() -> assertEquals(w.getFives(), w2.getFives(), "fives"),
+				() -> assertEquals(w.getTens(), w2.getTens()),
+				() -> assertEquals(w.getTwenties(), w2.getTwenties()),
+				() -> assertEquals(w.getHundreds(), w2.getHundreds())
+				);	
+	}
+	
+	@ParameterizedTest
+	@MethodSource("walletAmountProvider")
+	public void testAmountConstructor(Wallet w, int amount) {
+		Wallet w2 = new Wallet(amount);
+		assertAll("Amount Contructor",
+				() -> assertEquals(w.getOnes(),w2.getOnes()),
+				() -> assertEquals(w.getFives(), w2.getFives(), "fives"),
+				() -> assertEquals(w.getTens(), w2.getTens()),
+				() -> assertEquals(w.getTwenties(), w2.getTwenties()),
+				() -> assertEquals(w.getHundreds(), w2.getHundreds())
+				);	
+	}
+	
+	static Arguments[] walletAmountProvider() {
+		return new Arguments[] {
+				Arguments.arguments(new Wallet(0,0,0,0,0), 0),
+				Arguments.arguments(new Wallet(1,1,1,1,1), 136)
+		};
+	}
+	
+	
+	
 
 }

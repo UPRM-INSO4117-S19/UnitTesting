@@ -22,7 +22,11 @@ public class Wallet {
 	 * Creates a new wallet with exactly the same bills as the parameter wallet
 	 */
 	public Wallet(Wallet w) {
-		// YOUR CODE HERE
+		this.ones = w.ones;
+		this.fives = w.tens;
+		this.tens = w.tens;
+		this.twenties = w.twenties;
+		this.hundreds = w.hundreds;
 	}
 
 	/*
