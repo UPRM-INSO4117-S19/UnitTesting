@@ -23,7 +23,7 @@ public class Wallet {
 	 */
 	public Wallet(Wallet w) {
 		this.ones = w.ones;
-		this.fives = w.tens;
+		this.fives = w.fives;
 		this.tens = w.tens;
 		this.twenties = w.twenties;
 		this.hundreds = w.hundreds;
@@ -50,7 +50,15 @@ public class Wallet {
 	 * number of dollars received as a parameter
 	 */
 	public Wallet(int dollars) {
-		// YOUR CODE HERE
+		hundreds = dollars / 100;
+		dollars -= hundreds * 100;
+		twenties = dollars / 20;
+		dollars -= twenties * 20;
+		tens = dollars / 10;
+		dollars -= tens * 10;
+		fives = dollars / 5;
+		dollars -= fives * 5;
+		ones = dollars;
 	}
 
 	// Getters 
@@ -99,5 +107,16 @@ public class Wallet {
 	public Wallet minimize() {
 		// YOUR CODE HERE
 		return null; // Dummy return. Please change and remove comment
+	}
+	
+	@Override
+	public String toString() {
+		return "Wallet(" +
+				"$100=" + this.hundreds + ", " +
+				"$20=" + this.twenties + ", " +
+				"$10=" + this.tens + ", " +
+				"$5=" + this.fives + ", " +
+				"$1=" + this.ones + ")";
+			
 	}
 }
