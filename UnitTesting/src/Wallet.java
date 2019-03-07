@@ -80,7 +80,8 @@ public class Wallet {
 	 */
 	public int getAmount() {
 		// YOUR CODE HERE
-		return 0; // Dummy return. Please change and remove comment
+		return 1*ones + 5*fives + 10*tens + 20*twenties + 100*hundreds;
+		//return 0; // Dummy return. Please change and remove comment
 	}
 
 	/*
@@ -88,7 +89,13 @@ public class Wallet {
 	 */
 	public Wallet add(Wallet w2) {
 		// YOUR CODE HERE
-		return null; // Dummy return. Please change and remove comment
+		this.ones += w2.ones;
+		this.tens += w2.tens;
+		this.fives += w2.fives;
+		this.twenties += w2.twenties;
+		this.hundreds += w2.hundreds;
+
+		return this; // Dummy return. Please change and remove comment
 	}
 
 	/*
@@ -96,8 +103,10 @@ public class Wallet {
 	 * the amount of money represented by the dollars parameter
 	 */
 	public Wallet add(int dollars) {
+		Wallet w = new Wallet(dollars);
+		this.add(w);
 		// YOUR CODE HERE
-		return null; // Dummy return. Please change and remove comment
+		return this; // Dummy return. Please change and remove comment
 	}
 
 	/*

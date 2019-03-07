@@ -1,4 +1,5 @@
 import static org.junit.jupiter.api.Assertions.assertAll;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.mockito.Mockito.*;
+
 
 class WalletTest {
 
@@ -34,7 +38,7 @@ class WalletTest {
 		Wallet w2 = new Wallet(0,1,2,3,4);
 		assertTrue(w1.equals(w2));
 	}
-	
+
 	/* Returns false with non-wallet parameter */
 	@Test
 	public void testNonWalletNotEquals() {
@@ -42,7 +46,7 @@ class WalletTest {
 		Wallet w = new Wallet(1,1,1,1,1);
 		assertFalse(w.equals(o));
 	}
-	
+
 	/* equals is reflexive */
 	@Test
 	public void testObjectEqualToItself() {
@@ -89,10 +93,10 @@ class WalletTest {
 	 * Test Copy Constructor
 	 * 
 	 */
-	
+
 	@Test
 	public void testCopyContructor() {
-		
+
 		Wallet w = new Wallet(1,2,3,4,5);
 		Wallet w2 = new Wallet(w);
 		assertAll("Copy Contructor",
@@ -103,7 +107,7 @@ class WalletTest {
 				() -> assertEquals(w.getHundreds(), w2.getHundreds())
 				);	
 	}
-	
+
 	@ParameterizedTest
 	@MethodSource("walletAmountProvider2")
 	public void testAmountConstructor(Wallet w, int amount) {
@@ -116,14 +120,14 @@ class WalletTest {
 				() -> assertEquals(w.getHundreds(), w2.getHundreds())
 				);
 	}
-	
+
 	static Arguments[] walletAmountProvider() {
 		return new Arguments[] {
 				Arguments.arguments(new Wallet(0,0,0,0,0), 0),
 				Arguments.arguments(new Wallet(1,1,1,1,1), 136)
 		};
 	}
-	
+
 	static Arguments[] walletAmountProvider2() {
 		Random genRand = new Random();
 		int numCases = 100;
@@ -140,11 +144,49 @@ class WalletTest {
 		}
 		return result;
 	}
-	
 
-	
-	
-	
-	
+	@ParameterizedTest
+	@MethodSource("walletTripleProvider")
+	public void testAddWallet(Wallet wTarget, Wallet wSource, Wallet wExpected) {
+		Wallet oldSource = new Wallet(
+				wSource.getOnes(),
+				wSource.getFives(),
+				wSource.getTens(),
+				wSource.getTwenties(),
+				wSource.getHundreds());
+
+		Wallet newTarget = wTarget.add(wSource);
+		assertAll("Wallet add method",
+				// Check that new target is the same object as the old target
+				()->assertTrue(newTarget == wTarget),
+
+				// Check that modified target is equal to expected wallet
+				()->assertAll("Target Wallet with incorrect bills",
+						() -> assertEquals(newTarget.getOnes(),wExpected.getOnes(), "ones"),
+						() -> assertEquals(newTarget.getFives(), wExpected.getFives(), "fives"),
+						() -> assertEquals(newTarget.getTens(), wExpected.getTens(), "tens"),
+						() -> assertEquals(newTarget.getTwenties(), wExpected.getTwenties(), "twenties"),
+						() -> assertEquals(newTarget.getHundreds(), wExpected.getHundreds(), "hundreds")
+						),
+
+				// Check that source wallet did not change
+
+				() -> assertAll("Source Wallet modified",
+						() -> assertEquals(oldSource.getOnes(),wSource.getOnes()),
+						() -> assertEquals(oldSource.getFives(), wSource.getFives(), "fives"),
+						() -> assertEquals(oldSource.getTens(), wSource.getTens()),
+						() -> assertEquals(oldSource.getTwenties(), wSource.getTwenties()),
+						() -> assertEquals(oldSource.getHundreds(), wSource.getHundreds())
+						));
+	}
+
+	static Arguments[] walletTripleProvider() {
+		return new Arguments[] {
+				Arguments.arguments(new Wallet(0,0,0,0,0), new Wallet(0,0,0,0,0), new Wallet(0,0,0,0,0)),
+				Arguments.arguments(new Wallet(0,1,0,0,0), new Wallet(0,0,0,0,0), new Wallet(0,1,0,0,0)),
+				Arguments.arguments(new Wallet(0,0,0,0,0), new Wallet(0,1,0,0,0), new Wallet(0,1,0,0,0)),
+				Arguments.arguments(new Wallet(1,2,3,4,5), new Wallet(40,50,60,70,80), new Wallet(41,52,63,74,85))
+		};
+	}
 
 }
